@@ -16,7 +16,12 @@ root.render(
       <Routes>
         <Route element={<Header/>}>
           <Route path="/" element={<App/>}/>
-          <Route path='plusdemots' element={<Morewords/>}/>
+          <Route path="/plusdemots" element={<Morewords/>}/>
+          <Route path="/contact" element={<Morewords/>}/>
+          <Route path="/modifications" element={<Morewords/>}/>
+          <Route path="/exercice" element={<Morewords/>}/>
+          <Route path="/motsdujour" element={<Morewords/>}/>
+          <Route path="/inscription" element={<Morewords/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
