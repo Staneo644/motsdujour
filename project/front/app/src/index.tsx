@@ -4,13 +4,22 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Header from './Header';
+import Morewords from './morewords';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Header/>}>
+          <Route path="/" element={<App/>}/>
+          <Route path='plusdemots' element={<Morewords/>}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 

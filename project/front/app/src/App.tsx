@@ -1,24 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
+
 
 function App() {
+
+  const navigate = useNavigate();
+
+  const handleClickMoreWord = () => {
+    navigate('/plusdemots')
+  }
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ minHeight: 'calc(100vh - 69px)', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <div></div>
+        <button className="custom-button btn-block"><h2>Mots du jour</h2></button>
+        <Button className="custom-button btn-block" onClick={handleClickMoreWord}><h2>Plus de mots</h2></Button>
+        <Button className="custom-button btn-block"><h2>Exercice</h2></Button>
+        <div></div>
+      </div>
     </div>
   );
 }

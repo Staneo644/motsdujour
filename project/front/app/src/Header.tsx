@@ -1,7 +1,7 @@
 import './Header.css';
-import React from 'react';
+import React, { useState } from 'react';
 import {Outlet} from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+import { Button, Dropdown, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FiSettings } from 'react-icons/fi';
 import {useNavigate} from "react-router-dom";
 //import bt  from 'react-bootstrap';
@@ -9,13 +9,19 @@ import DropdownButton from 'react-bootstrap';
 import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
 import { DropdownMenuProps } from 'react-bootstrap/esm/DropdownMenu';
+import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
 
 const Header = () => {
     const history = useNavigate();
+    const [isList, setIsList] = useState(false);
 
   const handleTitleClick = () => {
     history('/');
   };
+
+  const setOptionVisible = () => {
+    setIsList(!isList);
+  }
 
   return (
     <>
@@ -38,7 +44,7 @@ const Header = () => {
                border: 'none',
                backgroundColor: 'transparent',
                cursor: 'pointer',
-               transform: 'translate(17%, 0)'
+               transform: 'translate(20%, 0)'
 
            }}
            onClick={handleTitleClick}>
@@ -47,8 +53,6 @@ const Header = () => {
             </h1>
        </button>
         </div>
-        <div className="dropdown">
-        <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
        <button
          style={{
            border: 'none',
@@ -60,26 +64,43 @@ const Header = () => {
            top: '0px',
 
          }}
-       >
+        onClick={setOptionVisible}>
       
-<FiSettings size={32} />
+      <FiSettings size={32} />
     </button>
-    </button>
+        
+
+
 
   
-  <ul className="dropdown-menu dropdown-menu-end">
-    <li><Button className="dropdown-item" type="button">Action</Button></li>
-    <li><Button className="dropdown-item" type="button">Another action</Button></li>
-    <li><Button className="dropdown-item" type="button">Something else here</Button></li>
-  </ul>
-</div>
-        <a className="dropdown-toggle no-arrow" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+
   
-</a>
+      
 
         </header>
          <div>
+
            <main className='main'>
+            {isList &&
+          <ListGroup style={{position: 'absolute', right: '0'}}>
+            <ListGroupItem action variant="dark">
+              <h4>
+                inscrire
+                </h4>
+            </ListGroupItem>
+            <ListGroupItem action variant="dark">
+              <h4>
+                ajouter/modifier
+              </h4>
+            </ListGroupItem>
+            <ListGroupItem action variant="dark">
+              <h4>
+                contact
+              </h4>
+            </ListGroupItem>
+          </ListGroup>
+          }
                <Outlet></Outlet>
            </main>
           
@@ -88,3 +109,5 @@ const Header = () => {
 
  );
         }    
+
+        export default Header;
