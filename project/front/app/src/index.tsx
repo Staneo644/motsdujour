@@ -6,24 +6,36 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './Header';
-import Morewords from './morewords';
+import Morewords from './components/morewords';
+import { Suspense } from 'react';
+import Contact from './option/Contact';
+import Modif from './option/Modif';
+import Login from './option/Login';
+import { Spinner } from 'react-bootstrap';
+import Daywords from './components/Daywords';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+
+    <Suspense fallback={<div>Loading... <Spinner></Spinner></div>}>
+    {
       <Routes>
         <Route element={<Header/>}>
           <Route path="/" element={<App/>}/>
           <Route path="/plusdemots" element={<Morewords/>}/>
-          <Route path="/contact" element={<Morewords/>}/>
-          <Route path="/modifications" element={<Morewords/>}/>
+          <Route path="/contact" element={<Contact/>}/>
+          <Route path="/modifications" element={<Modif/>}/>
           <Route path="/exercice" element={<Morewords/>}/>
-          <Route path="/motsdujour" element={<Morewords/>}/>
-          <Route path="/inscription" element={<Morewords/>}/>
+          <Route path="/motsdujour" element={<Daywords/>}/>
+          <Route path="/inscription" element={<Login/>}/>
         </Route>
       </Routes>
+      }
+    </Suspense>
     </BrowserRouter>
   </React.StrictMode>
 );

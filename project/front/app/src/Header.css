@@ -1,7 +1,14 @@
+.background{
+   
+}
+
 .main{
-    position: absolute;
-    background-color: rgba(56, 1, 139, 1);
-    width:100vw;
-    height: calc(100vh - 68px);
-    bottom: 0;
+    top:0px;
+    bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: antiquewhite;
+    
 }
