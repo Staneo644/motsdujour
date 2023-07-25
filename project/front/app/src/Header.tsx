@@ -118,7 +118,7 @@ const Header = () => {
           <main className='main'>
           {isList &&
           <ListGroup ref={buttonRef} style={{position:'absolute', top: '58px',
-          right: 0}}>
+          right: 0, zIndex: '10' }}>
             <ListGroupItem action variant="dark" onClick={inscriptionClick}>
               <h4>
                 s'inscrire
