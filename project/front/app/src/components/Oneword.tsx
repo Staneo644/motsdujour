@@ -1,6 +1,5 @@
-import { MDBCard } from "mdb-react-ui-kit";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import { TouchEvent } from "react";
+import {useEffect, useRef, useState } from "react";
+import { metaCard } from "./card";
 
 export interface Word {
   name: string,
@@ -11,52 +10,178 @@ export interface Word {
 
 }
 
-
 function Oneword(liste: Word[]) {
+  const containerRefMiddle = useRef<HTMLDivElement | null>(null);
+  let cardIndex = 0;
+  let wordIndex = 0;
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [index, setIndex] = useState(0);
   const [isMouseDown, setIsMouseDown] = useState(false);
-  const [yCoord, setYCoord] = useState(0);
+  const [yMouseDown, setYMouseDown] = useState(0);
+  const [listCard, setListCard] = useState<metaCard[]>([new metaCard({word:liste[0], refPosition:'50%', transition:'0'}),new metaCard({word:liste[1], refPosition:'150%', transition:'0'})]);
+  //const [newPositionMiddle, setNewPositionMiddle] = useState('50%');
+  //const [newPositionLeft, setNewPositionLeft] = useState('-150%');
+  //const [newPositionRight, setNewPositionRight] = useState('calc(150%)');
 
-  const handleMouseDown = () => {
+  const addElementAtEnd = (element: metaCard) => {
+    setListCard([...listCard, element]);
+  };
+
+  const addElementAtStart = (element: metaCard) => {
+    setListCard([element, ...listCard]);
+  };
+
+  const removeElementAtEnd = () => {
+    const newList = [...listCard];
+    newList.pop();
+    setListCard(newList);
+  };
+
+  const removeElementAtStart = () => {
+    const newList = [...listCard];
+    newList.shift();
+    setListCard(newList);
+  };
+
+  const handleMouseDown = (event: any) => {
+    listCard.forEach((metacard: any) => {
+      metacard.setTransition('0s');
+    })
+    setYMouseDown(event.clientX);
+    console.log('mouse down');
     setIsMouseDown(true);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (event: any) => {
+    console.log('mouse up');
+    listCard.forEach((metacard: any) => {
+      metacard.setPosition(0);
+      metacard.setTransition('1.5s');
+    })
+    const px = event.clientX - yMouseDown;
+    // if (hasMove !== 0) {
+    //   if (cardIndex === 2) {
+    //     removeElementAtStart()
+    //     setCardIndex(cardIndex - 1);
+    //   }
+    //   else if (cardIndex === 0 && listCard.length === 3){
+    //     removeElementAtEnd();
+    //     setCardIndex(cardIndex + 1);
+    //   }
+    
+    //   setHasMove(0);
+    // }
+    if (px > 30 && wordIndex > 0) {
+      console.log('mouse up up');
+      if (wordIndex !== liste.length - 1) {
+        removeElementAtEnd();
+      }
+      wordIndex = (wordIndex - 1);
+      if (wordIndex === 0) {
+        cardIndex = (cardIndex - 1);
+      }
+      else {
+        addElementAtStart(new metaCard({word:liste[wordIndex - 1], refPosition:'-150%', transition:'0.5s'}));
+      }
+    }
+    else if (px < 30 && wordIndex < liste.length - 1) {
+      if (wordIndex === 0) {
+        cardIndex = (cardIndex + 1);
+        console.log('aaa')
+      }
+      else {
+        removeElementAtStart();
+      }
+      wordIndex =(wordIndex + 1);
+      if (wordIndex !== liste.length - 1) {
+        addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'0.5s'}));
+      }
+      console.log('mouse up down ' + wordIndex + ' ' + cardIndex);
+    }
+    listCard[cardIndex].setRefPosition('50%');
+    if (cardIndex < listCard.length - 1) {
+      listCard[cardIndex + 1].setRefPosition('150%');
+    }
+    if (cardIndex > 0) {
+      listCard[cardIndex - 1].setRefPosition('-150%');
+    }
+    
     setIsMouseDown(false);
   };
 
   const handleMouseMove = (event: any) => {
-    if (isMouseDown && containerRef.current) {
-      const containerBounds = containerRef.current.getBoundingClientRect();
-      const mouseY = event.clientY - containerBounds.top;
-      setYCoord(mouseY);
+    if (isMouseDown && containerRefMiddle.current) {
+      console.log('mouse move');
+      const px = event.clientX - yMouseDown;
+      // if (px < -100 && wordIndex < liste.length - 1) {
+      //   if (hasMove === 0) {
+
+      //     setCardIndex(cardIndex + 1);
+      //     addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'0.5s'}));
+      //     setWordIndex(wordIndex + 1);
+      //     setHasMove(1);
+      //   }
+      //   else if hasMove === -1 {
+      //     setHasMove(0);
+      //     setCardIndex(cardIndex + 1);
+      //     setWordIndex(wordIndex + 1);
+      // }
+      // else if hasMove === 1 {
+      //   setHasMove(0);
+      // }
+      // if (px < -100 && wordIndex < liste.length - 1 && hasMove === 0) {
+      //   setCardIndex(cardIndex + 1);
+      //   addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'0.5s'}));
+      //   setWordIndex(wordIndex + 1);
+      //   setHasMove(1);
+      //  }
+      // else if (hasMove === 1) {
+      //   setHasMove(0);
+      // }
+      listCard.forEach((metacard: any) => {
+        metacard.setPosition(px);
+      })
     }
   };
+
+  useEffect(() => {
     
+    // addElementAtStart(new metaCard(liste[cardIndex], '50%', '0.5s'));
+    // if (cardIndex < liste.length - 1) {
+    //   addElementAtEnd(new metaCard(liste[cardIndex + 1], '150%', '0.5s'));
+    // }
+
+  }, []
+  )
+
+
+  const _exposeCard = () => {
+    return (
+      <>
+      
+      </>
+      )}
+
+ 
     return (
 
-        <div ref={containerRef} style={{width: '100%', height: '100%'}}
+        <div ref={containerRefMiddle} style={{width:'100vw', height: '100%'}}
         onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      onTouchStart={handleMouseDown}
-      onTouchEnd={handleMouseUp}
-      onTouchMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        onTouchStart={handleMouseDown}
+        onTouchEnd={handleMouseUp}
+        onTouchMove={handleMouseMove}
         >
-            <MDBCard  style={{width: '70vw', justifyContent: 'center', alignItems: 'center', height: '70vh', top: '10vh', display: 'flex', flexDirection: 'column', backgroundImage: 'url(https://s2.qwant.com/thumbr/474x323/7/5/15e7a9bcd784af960fb05e85addd943f5f08a5259bb5803b58a1b3f39473cc/th.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%3Fid%3DOIP.jytUH6XTOQ7pXAgURy6LYQHaFD%26pid%3DApi&q=0&b=1&p=0&a=0)', backgroundSize: 'cover'}}>
-            <h2 style={{fontSize:'40px'}}>
-                <p style={{fontWeight: 'bold', fontStyle: 'italic', fontFamily: 'serif'}}> {liste[index].name} </p>
-                
+          {listCard.map((element, index) => {
+         return (
+          <div key={index}>
+            {element.getCard()}
+          </div>
+        );
+      })}
 
-            </h2>
-            </MDBCard>
-            
         </div>
-
     )
-
 }
 
 export default Oneword;

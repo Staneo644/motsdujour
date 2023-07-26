@@ -6,5 +6,5 @@
     align-items: center;
     text-align: center;
     color: antiquewhite;
-    
+    height: calc(100vh - 58px);
 }
