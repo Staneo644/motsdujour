@@ -6,10 +6,7 @@ import Oneword, { Word } from "./Oneword";
 
 const Daywords = () => {
 
-    const [listWord, setListWord] = useState<Word[]>([
-
-        
-        
+    const [listWord] = useState<Word[]>([
         {
             name:'Tophet', etymologie:'vient de l\'hébreu <tōfet> qui désigne un lieu prés de Jérusalem, où, selon la bible, les cananéens sacrifiaient leurs enfants', definition:'désigne la partie centrale des sanctuaire dans les religions phéniciennes, dans lequel il y a des urnes contenant les cendres des enfants et animaux sacrifiés, et où se trouvent de nombreuses stèles votives', otherwords:'bah bien', type:4
         },
@@ -18,8 +15,13 @@ const Daywords = () => {
         },
         {
             name:'Me revoilà', etymologie:'comment ça va', definition:'ça va et toi', otherwords:'bah bien', type:4
+        },
+        {
+            name:'Me revoilo', etymologie:'comment ça va', definition:'ça va et toi', otherwords:'bah bien', type:4
+        },
+        {
+            name:'Me revoilu', etymologie:'comment ça va', definition:'ça va et toi', otherwords:'bah bien', type:4
         }
-    
 ])
     
     return (Oneword(listWord))

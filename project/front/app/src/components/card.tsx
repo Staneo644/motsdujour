@@ -12,11 +12,6 @@ export class metaCard extends React.Component {
       this.transition = props.transition;
       this.refPosition = props.refPosition;
     }
-    state = {
-        word: "",
-        position: 0,
-        transition: "",
-      };
     word: Word;
     card: any;
     position: number;

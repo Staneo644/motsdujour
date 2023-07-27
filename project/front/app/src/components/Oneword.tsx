@@ -10,39 +10,38 @@ export interface Word {
 
 }
 
+var cardIndex = 0;
+var wordIndex = 0;
 function Oneword(liste: Word[]) {
-  const containerRefMiddle = useRef<HTMLDivElement | null>(null);
-  let cardIndex = 0;
-  let wordIndex = 0;
+  
+  const [listCard, setListCard] = useState<metaCard[]>([new metaCard({word:liste[0], refPosition:'50%', transition:'0'}), new metaCard({word:liste[1], refPosition:'150%', transition:'0'})]);
 
+  const containerRefMiddle = useRef<HTMLDivElement | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [yMouseDown, setYMouseDown] = useState(0);
-  const [listCard, setListCard] = useState<metaCard[]>([new metaCard({word:liste[0], refPosition:'50%', transition:'0'}),new metaCard({word:liste[1], refPosition:'150%', transition:'0'})]);
-  //const [newPositionMiddle, setNewPositionMiddle] = useState('50%');
-  //const [newPositionLeft, setNewPositionLeft] = useState('-150%');
-  //const [newPositionRight, setNewPositionRight] = useState('calc(150%)');
+  const [yCoord, setYCoord] = useState(0);
+  const [transition, setTransition] = useState('0.5s');
 
   const addElementAtEnd = (element: metaCard) => {
-    setListCard([...listCard, element]);
+    listCard.push(element);
   };
 
   const addElementAtStart = (element: metaCard) => {
-    setListCard([element, ...listCard]);
+    listCard.unshift(element);
   };
 
   const removeElementAtEnd = () => {
-    const newList = [...listCard];
-    newList.pop();
-    setListCard(newList);
+    listCard.pop();
   };
 
   const removeElementAtStart = () => {
-    const newList = [...listCard];
-    newList.shift();
-    setListCard(newList);
+    console.log(listCard)
+    listCard.shift();
+    console.log(listCard)
   };
 
   const handleMouseDown = (event: any) => {
+    setTransition('0s');
     listCard.forEach((metacard: any) => {
       metacard.setTransition('0s');
     })
@@ -53,24 +52,13 @@ function Oneword(liste: Word[]) {
 
   const handleMouseUp = (event: any) => {
     console.log('mouse up');
-    listCard.forEach((metacard: any) => {
-      metacard.setPosition(0);
+    listCard.forEach((metacard: metaCard) => {
       metacard.setTransition('1.5s');
+      metacard.setPosition(0);
     })
     const px = event.clientX - yMouseDown;
-    // if (hasMove !== 0) {
-    //   if (cardIndex === 2) {
-    //     removeElementAtStart()
-    //     setCardIndex(cardIndex - 1);
-    //   }
-    //   else if (cardIndex === 0 && listCard.length === 3){
-    //     removeElementAtEnd();
-    //     setCardIndex(cardIndex + 1);
-    //   }
-    
-    //   setHasMove(0);
-    // }
-    if (px > 30 && wordIndex > 0) {
+    console.log(px + ' et ' + wordIndex)
+    if (px > 150 && wordIndex > 0) {
       console.log('mouse up up');
       if (wordIndex !== liste.length - 1) {
         removeElementAtEnd();
@@ -80,20 +68,20 @@ function Oneword(liste: Word[]) {
         cardIndex = (cardIndex - 1);
       }
       else {
-        addElementAtStart(new metaCard({word:liste[wordIndex - 1], refPosition:'-150%', transition:'0.5s'}));
+        addElementAtStart(new metaCard({word:liste[wordIndex - 1], refPosition:'-50%', transition:'1.5s'}));
       }
     }
-    else if (px < 30 && wordIndex < liste.length - 1) {
+    else if (px < -150 && wordIndex < liste.length - 1) {
       if (wordIndex === 0) {
         cardIndex = (cardIndex + 1);
-        console.log('aaa')
       }
       else {
+        console.log('aaa')
         removeElementAtStart();
       }
       wordIndex =(wordIndex + 1);
       if (wordIndex !== liste.length - 1) {
-        addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'0.5s'}));
+        addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'1.5s'}));
       }
       console.log('mouse up down ' + wordIndex + ' ' + cardIndex);
     }
@@ -102,7 +90,7 @@ function Oneword(liste: Word[]) {
       listCard[cardIndex + 1].setRefPosition('150%');
     }
     if (cardIndex > 0) {
-      listCard[cardIndex - 1].setRefPosition('-150%');
+      listCard[cardIndex - 1].setRefPosition('-50%');
     }
     
     setIsMouseDown(false);
@@ -112,56 +100,13 @@ function Oneword(liste: Word[]) {
     if (isMouseDown && containerRefMiddle.current) {
       console.log('mouse move');
       const px = event.clientX - yMouseDown;
-      // if (px < -100 && wordIndex < liste.length - 1) {
-      //   if (hasMove === 0) {
-
-      //     setCardIndex(cardIndex + 1);
-      //     addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'0.5s'}));
-      //     setWordIndex(wordIndex + 1);
-      //     setHasMove(1);
-      //   }
-      //   else if hasMove === -1 {
-      //     setHasMove(0);
-      //     setCardIndex(cardIndex + 1);
-      //     setWordIndex(wordIndex + 1);
-      // }
-      // else if hasMove === 1 {
-      //   setHasMove(0);
-      // }
-      // if (px < -100 && wordIndex < liste.length - 1 && hasMove === 0) {
-      //   setCardIndex(cardIndex + 1);
-      //   addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'0.5s'}));
-      //   setWordIndex(wordIndex + 1);
-      //   setHasMove(1);
-      //  }
-      // else if (hasMove === 1) {
-      //   setHasMove(0);
-      // }
       listCard.forEach((metacard: any) => {
         metacard.setPosition(px);
       })
+      setYCoord(yMouseDown + event.clientX);
     }
   };
 
-  useEffect(() => {
-    
-    // addElementAtStart(new metaCard(liste[cardIndex], '50%', '0.5s'));
-    // if (cardIndex < liste.length - 1) {
-    //   addElementAtEnd(new metaCard(liste[cardIndex + 1], '150%', '0.5s'));
-    // }
-
-  }, []
-  )
-
-
-  const _exposeCard = () => {
-    return (
-      <>
-      
-      </>
-      )}
-
- 
     return (
 
         <div ref={containerRefMiddle} style={{width:'100vw', height: '100%'}}
