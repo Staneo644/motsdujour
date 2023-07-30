@@ -5,22 +5,19 @@ export interface Word {
   name: string,
     etymologie: string,
     definition: string,
-    otherwords: string,
     type:number
-
 }
 
 var cardIndex = 0;
 var wordIndex = 0;
 function Oneword(liste: Word[]) {
   
-  const [listCard, setListCard] = useState<metaCard[]>([new metaCard({word:liste[0], refPosition:'50%', transition:'0'}), new metaCard({word:liste[1], refPosition:'150%', transition:'0'})]);
+  const [listCard, setListCard] = useState<metaCard[]>([new metaCard({word:liste[0], refPosition:'50%', transition:'0', _index: 0}), new metaCard({word:liste[1], refPosition:'150%', transition:'0', _index: 1})]);
 
   const containerRefMiddle = useRef<HTMLDivElement | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
   const [yMouseDown, setYMouseDown] = useState(0);
   const [yCoord, setYCoord] = useState(0);
-  const [transition, setTransition] = useState('0.5s');
 
   const addElementAtEnd = (element: metaCard) => {
     listCard.push(element);
@@ -41,7 +38,6 @@ function Oneword(liste: Word[]) {
   };
 
   const handleMouseDown = (event: any) => {
-    setTransition('0s');
     listCard.forEach((metacard: any) => {
       metacard.setTransition('0s');
     })
@@ -53,7 +49,7 @@ function Oneword(liste: Word[]) {
   const handleMouseUp = (event: any) => {
     console.log('mouse up');
     listCard.forEach((metacard: metaCard) => {
-      metacard.setTransition('1.5s');
+      metacard.setTransition('0.5s');
       metacard.setPosition(0);
     })
     const px = event.clientX - yMouseDown;
@@ -68,7 +64,7 @@ function Oneword(liste: Word[]) {
         cardIndex = (cardIndex - 1);
       }
       else {
-        addElementAtStart(new metaCard({word:liste[wordIndex - 1], refPosition:'-50%', transition:'1.5s'}));
+        addElementAtStart(new metaCard({word:liste[wordIndex - 1], refPosition:'-50%', transition:'0.5s', _index: wordIndex - 1}));
       }
     }
     else if (px < -150 && wordIndex < liste.length - 1) {
@@ -81,7 +77,7 @@ function Oneword(liste: Word[]) {
       }
       wordIndex =(wordIndex + 1);
       if (wordIndex !== liste.length - 1) {
-        addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'1.5s'}));
+        addElementAtEnd(new metaCard({word:liste[wordIndex + 1], refPosition:'150%', transition:'0.5s', _index: wordIndex + 1}));
       }
       console.log('mouse up down ' + wordIndex + ' ' + cardIndex);
     }
@@ -119,7 +115,7 @@ function Oneword(liste: Word[]) {
         >
           {listCard.map((element, index) => {
          return (
-          <div key={index}>
+          <div key={element.getIndex()}>
             {element.getCard()}
           </div>
         );

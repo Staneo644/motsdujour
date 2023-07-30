@@ -13,6 +13,8 @@ import Modif from './option/Modif';
 import Login from './option/Login';
 import { Spinner } from 'react-bootstrap';
 import Daywords from './components/Daywords';
+import { Theme } from './components/theme';
+import { Register } from './option/Register';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -31,7 +33,9 @@ root.render(
           <Route path="/modifications" element={<Modif/>}/>
           <Route path="/exercice" element={<Morewords/>}/>
           <Route path="/motsdujour" element={<Daywords/>}/>
-          <Route path="/inscription" element={<Login/>}/>
+          <Route path="/inscription" element={<Register/>}/>
+          <Route path="/connexion" element={<Login/>}/>
+          <Route path="/theme" element={<Theme/>}/>
         </Route>
       </Routes>
       }

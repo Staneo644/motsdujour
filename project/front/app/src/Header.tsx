@@ -2,9 +2,8 @@ import './Header.css';
 import { useEffect, useRef, useState } from 'react';
 import {Outlet} from 'react-router-dom';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import { FiSettings } from 'react-icons/fi';
+import { FiArrowLeft, FiSettings } from 'react-icons/fi';
 import {useNavigate} from "react-router-dom";
-
 
 const Header = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -69,6 +68,21 @@ const Header = () => {
   return (
     <div style={{height: '100%'}}>
     <header ref={headerRef} style={{display: 'flex', justifyContent: 'center', position: 'relative', height: '58px'}}>
+          <button
+          onClick={() => {navigate(-1)}}
+           style={{
+            border: 'none',
+          
+            backgroundColor: 'transparent',
+            marginRight: '20px',
+            transform: 'translate(10%, 0)',
+            cursor: 'pointer',
+            left: '10px',
+            top: '0px',
+  
+          }}>
+            <FiArrowLeft size={32} />
+          </button>
     <div
         style={{
           backgroundColor: 'white',
@@ -78,12 +92,13 @@ const Header = () => {
           flex: 1,
         }}>
 
+
        <button
            style={{
                border: 'none',
                backgroundColor: 'transparent',
                cursor: 'pointer',
-               transform: 'translate(16%, 0)'
+               transform: 'translate(0, 0)'
            }}
            onClick={handleTitleClick}>
            <h1 style={{textAlign: 'center'}}>
@@ -121,7 +136,7 @@ const Header = () => {
           right: 0, zIndex: '10' }}>
             <ListGroupItem action variant="dark" onClick={inscriptionClick}>
               <h4>
-                s'inscrire
+                connexion
                 </h4>
             </ListGroupItem>
             <ListGroupItem action variant="dark" onClick={modificationClick}>
