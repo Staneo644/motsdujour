@@ -35,7 +35,7 @@ export class metaCard extends React.Component {
     getCard(): any {
       return (
         <MDBCard  style={{width: '70vw', justifyContent: 'center', alignItems: 'center', top: 'calc(58px + 5%)', backgroundImage: 'url(https://s2.qwant.com/thumbr/474x323/7/5/15e7a9bcd784af960fb05e85addd943f5f08a5259bb5803b58a1b3f39473cc/th.jpg?u=https%3A%2F%2Ftse.mm.bing.net%2Fth%3Fid%3DOIP.jytUH6XTOQ7pXAgURy6LYQHaFD%26pid%3DApi&q=0&b=1&p=0&a=0)', backgroundSize: 'cover'
-          , left: 'calc(' + this.refPosition + ' + ' + this.position + 'px)', transform: 'translate(-50%)', borderRadius: '20px', boxShadow: '0px 0px 10px 0px black', overflowY: 'scroll', overflowX: 'hidden', position: 'fixed', transition: this.transition, maxHeight: 'calc(90vh - 58px)'
+          , left: 'calc(' + this.refPosition + ' + ' + this.position + 'px)', transform: 'translate(-50%)', borderRadius: '20px', boxShadow: '0px 0px 10px 0px black', overflowY: 'scroll', overflowX: 'hidden', position: 'fixed', transition: this.transition
           }}
           >
               <p style={{ marginTop: '10px', marginLeft: '15px', fontSize:'20px', fontStyle: 'italic', fontFamily: 'serif'}}> {this.word.etymologie} </p>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
     MDBContainer,
     MDBInput,
@@ -9,11 +9,17 @@ import {
   }
   from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
+import { isConnected } from '../Header';
 
 function Login () {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
+  const navigate = useNavigate();
 
+  const handleRegister = () => {
+    navigate('/inscription');
+  }
   const handleLogin = async () => {
     console.log(email, password);
     try {
@@ -28,7 +34,8 @@ function Login () {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('accessToken', data.access_token);
-        window.location.href = '/page-privee';
+        //isConnected = true;
+        navigate('/');
       } else {
         console.log('Échec de la connexion');
       }
@@ -51,9 +58,11 @@ function Login () {
             <a href="!#">Mot-de-passe oublié ?</a>
             <p></p>
           <button style={{backgroundColor: '#4b91ff'}} className="mb-4" onClick={handleLogin}>connexion</button>
-          <p></p>
-          Vous n'avez pas de compte ?
-          <button style={{backgroundColor: '#4b91ff'}} className="mb-4" onClick={() => {console.log("s")}}>s'inscrire</button>
+          <p></p> 
+          
+            Vous n'avez pas de compte ?
+         
+          <button style={{backgroundColor: '#4b91ff'}} className="mb-4" onClick={handleRegister}>s'inscrire</button>
     
         </MDBContainer>
         </MDBCard>

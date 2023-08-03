@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 export function Register() {
     const navigate = useNavigate();
+    const [error, setError] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,9 +26,11 @@ export function Register() {
   
         if (response.ok) {
           console.log('Inscription réussie !');
+          setError(false);
           navigate('/connexion');
         } else {
           console.log('Échec de l\'inscription');
+          setError(true);
         }
       } catch (error) {
         console.error('Erreur lors de l\'inscription :', error);
@@ -43,7 +46,13 @@ export function Register() {
           <MDBInput wrapperClass='mb-4' label='Mot-de-passe' id='form2' type='password' onChange={(e) => setPassword(e.target.value)}/>
     
           <div className="d-flex justify-content-between mx-3 mb-4">
-            <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label='Se souvenir de moi' />
+            <MDBCheckbox name='flexCheck' value='' id='flexCheckDefault' label="S'inscrire à la newsletter" />
+          </div>
+          <div style={{color: 'red'}}>
+            {error && <>
+                Adresse courriel déjà utilisée
+            </>
+                }
           </div>
             <p></p>
           <button style={{backgroundColor: '#4b91ff'}} className="mb-4" onClick={handleLogin}>Inscription</button>

@@ -5,6 +5,30 @@ import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FiArrowLeft, FiSettings } from 'react-icons/fi';
 import {useNavigate} from "react-router-dom";
 
+export var isConnected = false;
+
+function getStorageValue(key:string, defaultValue:any) {
+  const saved = localStorage.getItem(key);
+  if (saved){
+
+    //const initial = JSON.parse(saved);
+    return saved;
+  }
+  return defaultValue;
+}
+
+export const useLocalStorage = (key:string, defaultValue:any) => {
+  const [value, setValue] = useState(() => {
+    return getStorageValue(key, defaultValue);
+  });
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(value));
+    console.log(value);
+  }, [key, value]);
+
+  return [value, setValue];
+};
+
 const Header = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -12,6 +36,7 @@ const Header = () => {
   const [isList, setIsList] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
   const optionRef = useRef<HTMLButtonElement>(null);
+  //const [isConnected, setIsConnected] = useLocalStorage('accessToken', null);
 
   const handleTitleClick = () => {
     navigate('/');
@@ -27,17 +52,44 @@ const Header = () => {
     setIsList(false);
   }
 
+  const logoutClick = () => {
+    localStorage.removeItem('accessToken');
+    //setIsConnected(false)
+    isConnected = false;
+    setIsList(false);
+  }
+
   const inscriptionClick = () => {
-    navigate('/inscription');
+    navigate('/connexion');
     setIsList(false);
   }
 
   const setOptionVisible = () => {
     setIsList(!isList);
   }
+  /*useEffect(() => {
+    const handleStorageChange = (event:any) => {
+    
+      
+          if (localStorage.getItem('accessToken')){
+            setIsConnected(true);
+          }
+          else {
+            setIsConnected(false);
+          }
+   
+      
+    };
 
+    window.addEventListener('storage', handleStorageChange);
 
+    // Clean up the event listener when the component unmounts.
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, ['accessToken']);*/
   useEffect(() => {
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         buttonRef.current &&
@@ -134,11 +186,22 @@ const Header = () => {
           {isList &&
           <ListGroup ref={buttonRef} style={{position:'absolute', top: '58px',
           right: 0, zIndex: '10' }}>
+            {
+              isConnected===null &&
             <ListGroupItem action variant="dark" onClick={inscriptionClick}>
               <h4>
                 connexion
-                </h4>
+              </h4>
             </ListGroupItem>
+            }
+            {
+              isConnected!==null &&
+              <ListGroupItem action variant="dark" onClick={logoutClick}>
+                <h4>
+                  déconnexion
+                </h4>
+              </ListGroupItem>
+            }
             <ListGroupItem action variant="dark" onClick={modificationClick}>
               <h4>
                 ajouter/modifier
