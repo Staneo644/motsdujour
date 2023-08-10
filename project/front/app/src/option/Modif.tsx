@@ -12,7 +12,7 @@ function decodeHTMLEntities(input:string): string | null {
 }
 
 interface IDefinition {
-  definition: string;
+  definition: string[];
   nature: string;
 }
 
@@ -23,12 +23,7 @@ function Modif () {
 
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchTerm(event.target.value);
-        console.log(searchTerm);
-    };
-
-    const dataToSend = {
-      //motWiki
+      setSearchTerm(event.target.value);
     };
 
     const fetchData = async () => {
@@ -63,17 +58,19 @@ function Modif () {
           
           const extractedDefinitions :IDefinition[] = [];
           for (let index = 0; index < natureDef.length; index++) {
-            
-            (natureDef[index]).forEach((definitionObj:any) => {
-              let result:IDefinition = {definition: '', nature: ''};
+            (natureDef[index]).forEach((definitionObj:{ [key: string]: string }) => {
+                let result:IDefinition = {definition: [], nature: ''};
                 result.nature = nature[index];
-                const definition = decodeHTMLEntities(removeHtmlTags(definitionObj["1"]));
-                const id = definitionObj["0"];
-                if (definition)
-                result.definition =  definition;
+                console.log("objet def", definitionObj)
+                const definition:string[] = [];
+                for (const key in definitionObj){
+                    const temp = decodeHTMLEntities(removeHtmlTags(definitionObj[key]));
+                    if (temp)
+                    definition.push(temp);
+                };
+                result.definition = definition;
                 extractedDefinitions.push(result);
-              
-           
+                console.log(result);
             });
           }
           setDefinitions(extractedDefinitions);
@@ -102,8 +99,11 @@ function Modif () {
             {!error &&
             
             <ul>
-                {definitions.map((result, index) => (
-                  <li key={index}>{result.nature}: {result.definition}</li>
+                {definitions.map((result, index) => (<>
+                   {result.definition.map((result2, index2) => (
+                     <li key={index2}> {result.nature}: {result2} </li>
+                     ))}
+                     </>
                   ))}
                 
             </ul>

@@ -5,8 +5,6 @@ import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { FiArrowLeft, FiSettings } from 'react-icons/fi';
 import {useNavigate} from "react-router-dom";
 
-export var isConnected = false;
-
 function getStorageValue(key:string, defaultValue:any) {
   const saved = localStorage.getItem(key);
   if (saved){
@@ -36,7 +34,7 @@ const Header = () => {
   const [isList, setIsList] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
   const optionRef = useRef<HTMLButtonElement>(null);
-  //const [isConnected, setIsConnected] = useLocalStorage('accessToken', null);
+  const [isConnected, setIsConnected] = useLocalStorage('accessToken', null);
 
   const handleTitleClick = () => {
     navigate('/');
@@ -52,10 +50,15 @@ const Header = () => {
     setIsList(false);
   }
 
+  const profilClick = () => {
+    navigate('/profil');
+    setIsList(false);
+  }
+
   const logoutClick = () => {
-    localStorage.removeItem('accessToken');
-    //setIsConnected(false)
-    isConnected = false;
+    //localStorage.removeItem('accessToken');
+    setIsConnected(null)
+    //isConnected = false;
     setIsList(false);
   }
 
@@ -187,7 +190,7 @@ const Header = () => {
           <ListGroup ref={buttonRef} style={{position:'absolute', top: '58px',
           right: 0, zIndex: '10' }}>
             {
-              isConnected===null &&
+              localStorage.getItem('accessToken')==='null' &&
             <ListGroupItem action variant="dark" onClick={inscriptionClick}>
               <h4>
                 connexion
@@ -195,18 +198,25 @@ const Header = () => {
             </ListGroupItem>
             }
             {
-              isConnected!==null &&
+              localStorage.getItem('accessToken')!=='null' && 
+              <>
               <ListGroupItem action variant="dark" onClick={logoutClick}>
                 <h4>
                   déconnexion
                 </h4>
               </ListGroupItem>
+              <ListGroupItem action variant="dark" onClick={modificationClick}>
+                <h4>
+                  ajouter/modifier
+                </h4>
+              </ListGroupItem>
+              <ListGroupItem action variant="dark" onClick={profilClick}>
+                <h4>
+                  profil
+                </h4>
+              </ListGroupItem>
+              </>
             }
-            <ListGroupItem action variant="dark" onClick={modificationClick}>
-              <h4>
-                ajouter/modifier
-              </h4>
-            </ListGroupItem>
             <ListGroupItem action variant="dark" onClick={contactClick}>
               <h4>
                 contact

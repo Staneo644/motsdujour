@@ -9,7 +9,6 @@ import {
   }
   from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
-import { isConnected } from '../Header';
 
 function Login () {
   const [email, setEmail] = useState('');

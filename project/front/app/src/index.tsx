@@ -15,6 +15,7 @@ import { Spinner } from 'react-bootstrap';
 import Daywords from './components/Daywords';
 import { Theme } from './components/theme';
 import { Register } from './option/Register';
+import Profil from './option/profil';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -28,6 +29,7 @@ root.render(
       <Routes>
         <Route element={<Header/>}>
           <Route path="/" element={<App/>}/>
+          <Route path="/profil" element={<Profil/>}/>
           <Route path="/plusdemots" element={<Morewords/>}/>
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/modifications" element={<Modif/>}/>
