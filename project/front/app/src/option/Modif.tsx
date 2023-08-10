@@ -1,32 +1,93 @@
 import { MDBCard } from "mdb-react-ui-kit";
 import React, { useState } from 'react';
-import axios
+
+function removeHtmlTags(input: string): string {
+  const regex = /<[^>]*>/g;
+  return input.replace(regex, '');
+}
+
+function decodeHTMLEntities(input:string): string | null {
+  const doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+}
+
+interface IDefinition {
+  definition: string;
+  nature: string;
+}
 
 function Modif () {
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [searchResults, setSearchResults] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [definitions, setDefinitions] = useState<IDefinition[]>([]);
+  const [error, setError] = useState<boolean>(false);
+
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newSearchTerm = event.target.value;
-        setSearchTerm(newSearchTerm);
-
-        // Effectuer l'appel API ici
-        const apiUrl = `https://fr.wiktionary.org/w/api.php?action=opensearch&search=${newSearchTerm}`;
-        fetch(apiUrl)
-        .then((response) => {
-            if (!response.ok) {
-            throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then((data) => {
-            const results = data[1] as string[];
-            setSearchResults(results);
-        })
-        .catch((error) => {
-            console.error('Error fetching data:', error);
-        });
+        setSearchTerm(event.target.value);
+        console.log(searchTerm);
     };
+
+    const dataToSend = {
+      //motWiki
+    };
+
+    const fetchData = async () => {
+      const data = { motWiki: searchTerm };
+      console.log(searchTerm);
+      if (searchTerm.length > 1) {
+
+        try {
+          const response = await fetch('http://localhost:8080/app/api_wiki.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+              // Autres en-têtes nécessaires (si applicables)
+            },
+            body: 'motWiki=' + searchTerm,
+          });
+          
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+  
+          const jsonData = await response.json();
+          console.log(jsonData);
+          if (jsonData.error === '') {
+            setError(false);
+          }
+          else {
+            setError(true);
+          }
+          const natureDef = jsonData.natureDef;
+          const nature = jsonData.nature;
+          
+          const extractedDefinitions :IDefinition[] = [];
+          for (let index = 0; index < natureDef.length; index++) {
+            
+            (natureDef[index]).forEach((definitionObj:any) => {
+              let result:IDefinition = {definition: '', nature: ''};
+                result.nature = nature[index];
+                const definition = decodeHTMLEntities(removeHtmlTags(definitionObj["1"]));
+                const id = definitionObj["0"];
+                if (definition)
+                result.definition =  definition;
+                extractedDefinitions.push(result);
+              
+           
+            });
+          }
+          setDefinitions(extractedDefinitions);
+          
+          // Met à jour l'état avec les définitions extraites
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          console.log(definitions)
+        }
+      }
+      else {
+        setError(true);
+      }
+      };
 
     return (
         <MDBCard>
@@ -37,11 +98,17 @@ function Modif () {
                 onChange={handleSearch}
                 placeholder="Tapez un caractère..."
             />
+            {error && <div>Mot inconnu</div>}
+            {!error &&
+            
             <ul>
-                {searchResults.map((result, index) => (
-                <li key={index}>{result}</li>
-                ))}
+                {definitions.map((result, index) => (
+                  <li key={index}>{result.nature}: {result.definition}</li>
+                  ))}
+                
             </ul>
+                }
+            <button onClick={fetchData}>Fetch Data</button>
             </div>
         </MDBCard>
     );
