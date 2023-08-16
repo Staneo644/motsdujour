@@ -30,7 +30,6 @@ export const useLocalStorage = (key:string, defaultValue:any) => {
 const Header = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const [headerHeight, setHeaderHeight] = useState(0);
   const [isList, setIsList] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
   const optionRef = useRef<HTMLButtonElement>(null);
@@ -56,7 +55,7 @@ const Header = () => {
   }
 
   const logoutClick = () => {
-    //localStorage.removeItem('accessToken');
+    localStorage.removeItem('accessToken');
     setIsConnected(null)
     //isConnected = false;
     setIsList(false);
@@ -104,14 +103,6 @@ const Header = () => {
       setIsList(false)
     };
 
-      const headerElement = headerRef.current;
-      if (headerElement) {
-
-        const height = headerElement.clientHeight;
-        setHeaderHeight(height);
-        console.log(height);
-      }
-    
 
     document.addEventListener('mouseup', handleClickOutside);
 
