@@ -32,7 +32,7 @@ function Modif () {
       if (searchTerm.length > 1) {
 
         try {
-          const response = await fetch('http://localhost:8080/app/api_wiki.php', {
+          const response = await fetch('http://localhost:8081/app/api_wiki.php', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',

@@ -10,7 +10,7 @@ endif
 
 # --> PROGRAM --------------------------------------------------------------------
 PROGRAM = FT_TRANSCENDANCE
-AUTHOR = ajossera / fdaumas / gchatain / hpenaud
+AUTHOR = ajossera
 
 # ~~~~~~~~~~~~~~~~ SOURCES ~~~~~~~~~~~~~~~~
 
@@ -79,6 +79,13 @@ create: build
 
 # ~~~~~~~~~~~~~~~~ START ~~~~~~~~~~~~~~~~
 
+database :
+	docker-compose up mongodb
+
+back: 
+	docker-compose up -d mongodb
+	docker-compose up back
+
 start: build
 	# printf "%-62b%b" "$(BOLD)$(GREEN)Starting$(END) containers"
 	docker-compose -f docker-compose.yml up
@@ -98,6 +105,8 @@ down :
 
 # ~~~~~~~~~~~~ CLEANNING RULES ~~~~~~~~~~~~
 
+
+
 fclean purge : clean
 	printf "%-62b%b" "$(BOLD)$(RED)Removing$(END) containers"
 	@docker system prune -af >> /dev/null
@@ -115,16 +124,8 @@ re: header fclean all
 # --> HEADER ---------------------------------------------------------------------
 
 header :
-	echo
+	echo POLYMATHON
 
-	@printf "████████╗██████╗  █████╗ ███╗   ██╗███████╗ ██████╗███████╗███╗   ██╗██████╗ ███████╗███╗   ██╗ ██████╗███████╗\n"
-	@printf "╚══██╔══╝██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔════╝██╔════╝████╗  ██║██╔══██╗██╔════╝████╗  ██║██╔════╝██╔════╝\n"
-	@printf "   ██║   ██████╔╝███████║██╔██╗ ██║███████╗██║     █████╗  ██╔██╗ ██║██║  ██║█████╗  ██╔██╗ ██║██║     █████╗  \n"
-	@printf "   ██║   ██╔══██╗██╔══██║██║╚██╗██║╚════██║██║     ██╔══╝  ██║╚██╗██║██║  ██║██╔══╝  ██║╚██╗██║██║     ██╔══╝  \n"
-	@printf "   ██║   ██║  ██║██║  ██║██║ ╚████║███████║╚██████╗███████╗██║ ╚████║██████╔╝███████╗██║ ╚████║╚██████╗███████╗\n"
-	@printf "   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚══════╝ ╚═════╝╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝  ╚═══╝ ╚═════╝╚══════╝\n"
-
-	echo
 	echo "Authors :" $(AUTHOR)
 ifeq ($(OS_NAME), Linux)
 	echo "Last modification :" `ls --time-style=long-iso  -la1rt | awk '{print $$6, $$7, $$9, $$8}' | tail -n 1`

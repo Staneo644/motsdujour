@@ -5,3 +5,4 @@ project/front/app/node_modules
 .env
 .idea
 .idea/*
+project/mongodb/data/*
